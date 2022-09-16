@@ -1,0 +1,72 @@
+@use "./Constants.scss";
+
+.banner {
+  background: url("../photos/plani4.jpg") center center;
+  margin-top: 0.5rem;
+  width: 100%;
+  height: 50vh;
+  position: relative;
+}
+
+.banner__info {
+  background-color: #046483;
+  color: white;
+  height: 25vh;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  padding-top: 18vh;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 40px;
+  width: 300px;
+}
+
+.banner__info {
+  button {
+    background-color: white;
+    color: #024358;
+    text-transform: inherit;
+    margin-top: 20px;
+    font-weight: 600;
+  }
+}
+
+.banner__info > button:hover {
+  background-color: #e6f1f4;
+  color: #024358;
+}
+
+.banner__info > h5 {
+  margin-top: 10px;
+}
+
+@media screen and (min-width: 200px) and (max-width: 700px) {
+  .banner {
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // height: 25vh;
+    // background: url("../photos/plani4.jpg");
+    // background-size: cover;
+    // background-position: center;
+    background: url("../photos/plani4.jpg") center center;
+    margin-top: 0.5rem;
+    width: 100%;
+    height: 25vh;
+    position: relative;
+  }
+
+  .banner__info {
+    background-color: #046483;
+    color: white;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    padding-top: 5vh;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 20px;
+    width: 100%;
+    height: 18vh;
+    opacity: 0.9;
+  }
+}
