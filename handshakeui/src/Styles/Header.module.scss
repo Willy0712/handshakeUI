@@ -20,6 +20,7 @@
   height: 30px;
   border: 1px solid lightgray;
   border-radius: 999px;
+  box-sizing: content-box;
 }
 
 .header__right {
@@ -38,6 +39,7 @@
     border: none;
     padding: 10px;
     outline-width: 0;
+    box-sizing: content-box;
 
     /* width: 250px; */
   }
