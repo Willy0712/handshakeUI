@@ -4,7 +4,6 @@ import HomePage from "./Pages/HomePage";
 import { Routes, Route } from "react-router-dom";
 import Header from "./Components/MainComponets/Header";
 import Footer from "./Components/MainComponets/Footer";
-import SignIn from "./Components/SignIn/SignIn";
 
 function App() {
   return (
@@ -12,7 +11,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Header />}>
           <Route index element={<HomePage />} />
-          <Route path="/login" element={<SignIn />} />
         </Route>
       </Routes>
       <Footer />

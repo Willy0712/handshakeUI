@@ -4,10 +4,31 @@ import classes from "../../Styles/Header.module.scss";
 import logo from "../../photos/handshake_logo.png";
 import { Outlet, Link } from "react-router-dom";
 import { Fragment } from "react";
+import SignIn from "../SignIn/SignIn";
+import DialogModel from "../DialogModal";
 
 interface IHeaderProps {}
 
-const Header: React.FunctionComponent<IHeaderProps> = (props) => {
+const Header: React.FunctionComponent<IHeaderProps> = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpenDialog, setIsOpenDialog] = React.useState(false);
+
+  const handleDialogOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleOpen = () => {
+    setIsOpenDialog(true);
+  };
+
+  const handleClose = () => {
+    setIsOpenDialog(false);
+  };
+
   return (
     <Fragment>
       <div className={classes.header}>
@@ -22,10 +43,17 @@ const Header: React.FunctionComponent<IHeaderProps> = (props) => {
 
         <div className={classes.header__right}>
           <ul>
+            <li onClick={handleDialogOpen}>Login</li>
+            <DialogModel
+              title="Login"
+              children={<SignIn />}
+              isOpen={isOpen}
+              handleClose={handleDialogClose}
+            />
+
             <li>
-              <Link to="/login">Login</Link>
+              <Link to="/signup"> Sign-up</Link>
             </li>
-            <li>Sign-up</li>
           </ul>
         </div>
       </div>
