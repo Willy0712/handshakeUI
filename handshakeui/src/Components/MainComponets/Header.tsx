@@ -6,6 +6,7 @@ import { Outlet, Link } from "react-router-dom";
 import { Fragment } from "react";
 import SignIn from "../SignIn/SignIn";
 import DialogModel from "../DialogModal";
+import SignUp from "../SignUp/SignUp";
 
 interface IHeaderProps {}
 
@@ -46,14 +47,20 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
             <li onClick={handleDialogOpen}>Login</li>
             <DialogModel
               title="Login"
-              children={<SignIn />}
+              // children={<SignIn />}
               isOpen={isOpen}
               handleClose={handleDialogClose}
+              indexTab={0}
             />
 
-            <li>
-              <Link to="/signup"> Sign-up</Link>
-            </li>
+            <li onClick={handleOpen}>Sign-up</li>
+            <DialogModel
+              title="Sign-up"
+              // children={<SignUp />}
+              isOpen={isOpenDialog}
+              handleClose={handleClose}
+              indexTab={1}
+            />
           </ul>
         </div>
       </div>

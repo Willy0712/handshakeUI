@@ -1,7 +1,5 @@
 import {
-  Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   Divider,
@@ -14,12 +12,17 @@ import { TransitionProps } from "@mui/material/transitions";
 import React from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { Tabs, Tab, Box, Typography } from "@mui/material";
+import { useState } from "react";
+import SignIn from "./SignIn/SignIn";
+import SignUp from "./SignUp/SignUp";
 
 interface ModalProps {
   title: string;
-  children: React.ReactNode;
+  // children: React.ReactNode;
   isOpen: boolean;
   handleClose: () => void;
+  indexTab: number;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -33,12 +36,36 @@ const Transition = React.forwardRef(function Transition(
 
 const DialogModal: React.FunctionComponent<ModalProps> = ({
   title,
-  children,
   isOpen,
   handleClose,
+  indexTab,
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const [value, setValue] = useState(0);
+  const handleChange = (event: any, newValue: number) => {
+    setValue(newValue);
+  };
+
+  function TabPanel(props: any) {
+    let { children, value, index, ...other } = props;
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box>
+            <Typography>{children}</Typography>
+          </Box>
+        )}
+      </div>
+    );
+  }
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -49,16 +76,32 @@ const DialogModal: React.FunctionComponent<ModalProps> = ({
       open={isOpen}
       onClose={handleClose}
     >
-      <DialogTitle id="max-width-dialog-title">
-        {title}
+      <Tabs
+        value={value}
+        indicatorColor="primary"
+        textColor="primary"
+        onChange={handleChange}
+        aria-label="disabled tabs example"
+      >
+        <Tab label="Sign In" />
+
+        <Tab label="Sign Up" />
         <IconButton onClick={handleClose}>
           <CloseIcon />
         </IconButton>
-      </DialogTitle>
-      <DialogContent>
-        <Divider />
-        {children}
-      </DialogContent>
+      </Tabs>
+      <TabPanel value={value} index={0}>
+        <DialogContent>
+          <Divider />
+          <SignIn />
+        </DialogContent>
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <DialogContent>
+          <Divider />
+          <SignUp />
+        </DialogContent>
+      </TabPanel>
     </Dialog>
   );
 };

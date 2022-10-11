@@ -3,6 +3,8 @@ shades: #046483, #035975, #034e66, #024358, #023849, #022c3a, #01212c, #01161d ,
 tints: #1d7d9d , #368ca8, #4f9ab3 , #68a9be, #82b7c9, #9bc5d3, #b4d4de, #cde2e9 , #e6f1f4, #ffffff, 
 */
 
+$font-primary: "Raleway", sans-serif;
+
 $main-color: #046f92;
 $main-color-shade-1: #046483;
 $main-color-shade-2: #035975;
@@ -30,6 +32,7 @@ $font-weight-medium: 500;
 
 $darkColor: #43464b;
 $textColort: #555;
+$backgroundColorInput: rgba(0, 0, 0, 0.1);
 $pagePadding: 20px;
 $backgroundColor: #f8f8f8;
 $blue: #1a357a;

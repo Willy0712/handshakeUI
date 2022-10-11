@@ -1,18 +1,14 @@
-import { Dialog, DialogContent, DialogTitle, Modal } from "@mui/material";
+import { Fragment } from "react";
 import { useForm } from "react-hook-form";
-import module from "../../Styles/SignIn.module.scss";
+import { Link } from "react-router-dom";
+import classes from "../../Styles/SignIn.module.scss";
+import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
+import GoogleIcon from "@mui/icons-material/Google";
 
 interface LoginValues {
   emailOrUsername: string;
   password: string;
   isShowLogin: string;
-}
-
-interface SignInProps {
-  title: string;
-  children: React.ReactNode;
-  isOpen: boolean;
-  handleClose: () => void;
 }
 
 const SignIn: React.FunctionComponent = () => {
@@ -23,17 +19,51 @@ const SignIn: React.FunctionComponent = () => {
   } = useForm<LoginValues>();
 
   return (
-    <form onSubmit={handleSubmit((data) => console.log(data))}>
-      <label>Email or username</label>
-      <input {...register("emailOrUsername")} />
-      {errors.emailOrUsername && <p>Last name is required.</p>}
+    <Fragment>
+      <form
+        className={classes.signInform}
+        onSubmit={handleSubmit((data) => console.log(data))}
+      >
+        <input
+          {...register("emailOrUsername")}
+          className={classes.form__control}
+          placeholder="Email or username"
+        />
+        {errors.emailOrUsername && <p>Last name is required.</p>}
 
-      <label>Password</label>
-      <input {...register("password", { required: true })} />
-      {errors.password && <p>Please enter a valid password.</p>}
+        <input
+          {...register("password", { required: true })}
+          className={classes.form__control}
+          placeholder="Password"
+        />
+        {errors.password && <p>Please enter a valid password.</p>}
 
-      <input type="submit" />
-    </form>
+        <input type="submit" value="Sign in" className={classes.btn} />
+        <div className={classes.remember__forgotpass}>
+          <div className={classes.rememberMe}>
+            <input type="checkbox" />
+            <label className={classes.checkbox__wrap}>Remember Me</label>
+          </div>
+          <div className={classes.forgotpass}>
+            <Link to="#">Forgot Password?</Link>
+          </div>
+        </div>
+      </form>
+      <div className={classes.socialLinks}>
+        <p className={classes.justify__content__end}>
+          <Link to="#" className={classes.justify__content__center}>
+            <span className={classes.icons}>
+              <GoogleIcon />
+            </span>
+          </Link>
+          <Link to="#" className={classes.justify__content__center}>
+            <span className={classes.icons}>
+              <FacebookOutlinedIcon />
+            </span>
+          </Link>
+        </p>
+      </div>
+    </Fragment>
   );
 };
 
