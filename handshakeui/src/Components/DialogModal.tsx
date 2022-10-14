@@ -78,10 +78,9 @@ const DialogModal: React.FunctionComponent<ModalProps> = ({
     >
       <Tabs
         value={value}
-        indicatorColor="primary"
-        textColor="primary"
         onChange={handleChange}
         aria-label="disabled tabs example"
+        className={classes.tabs}
       >
         <Tab label="Sign In" />
 

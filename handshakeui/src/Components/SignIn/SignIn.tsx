@@ -49,19 +49,16 @@ const SignIn: React.FunctionComponent = () => {
           </div>
         </div>
       </form>
-      <div className={classes.socialLinks}>
-        <p className={classes.justify__content__end}>
-          <Link to="#" className={classes.justify__content__center}>
-            <span className={classes.icons}>
-              <GoogleIcon />
-            </span>
+      <div className={classes.signInWith}>
+        <h1>or sign in with </h1>
+        <div className={classes.socialLinks}>
+          <Link to="#" className={classes.socialLink}>
+            <GoogleIcon className={classes.icons} />
           </Link>
-          <Link to="#" className={classes.justify__content__center}>
-            <span className={classes.icons}>
-              <FacebookOutlinedIcon />
-            </span>
+          <Link to="#" className={classes.socialLink}>
+            <FacebookOutlinedIcon className={classes.icons} />
           </Link>
-        </p>
+        </div>
       </div>
     </Fragment>
   );

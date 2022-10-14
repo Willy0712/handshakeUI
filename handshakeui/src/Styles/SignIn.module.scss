@@ -93,6 +93,7 @@
   background: $main-color;
   border: 1px solid $main-color;
   color: $white;
+  font-family: $font-primary;
   font-weight: 500;
   @include gradient-background();
   //TODO: add hover effect
@@ -101,6 +102,7 @@
 ::placeholder {
   color: $black;
   opacity: 1; /* Firefox */
+  font-family: $font-primary;
 }
 
 .remember__forgotpass {
@@ -109,7 +111,7 @@
   align-items: center;
   margin-top: 10px;
   margin-bottom: 10px;
-  color: $textColort;
+  color: $textColor;
 
   .rememberMe {
     //TODO: add text clickalble: https://www.youtube.com/watch?v=y93M3RoKQUE
@@ -159,5 +161,52 @@
     input[type="checkbox"]:checked::after {
       display: block;
     }
+  }
+}
+
+.signInWith {
+  display: grid;
+  grid-template-columns: 2fr;
+  margin: auto;
+  justify-items: center;
+  row-gap: 2rem;
+
+  h1 {
+    font-family: $font-primary;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: $textColor;
+    justify-items: center;
+  }
+
+  .socialLinks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+    .socialLink {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: $white;
+      // color: $black;
+      font-size: 1.5rem;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+      &:hover {
+        background: $main-color;
+        color: $white;
+      }
+    }
+  }
+
+  .icons {
+    height: 2.4rem;
+    width: 2.4rem;
   }
 }
