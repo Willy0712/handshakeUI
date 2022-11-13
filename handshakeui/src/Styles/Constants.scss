@@ -104,3 +104,16 @@ $dangerForegroundColor: #711c24;
   @include gradient-background();
   //TODO: add hover effect
 }
+
+//DATEPICKER DESIGN
+.datepicker {
+  border: 1px solid $main-color;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background: $white;
+  color: $darkColor;
+  font-family: $font-primary;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 10px;
+}

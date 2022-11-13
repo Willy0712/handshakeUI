@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import classes from "../../Styles/SignIn.module.scss";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import GoogleIcon from "@mui/icons-material/Google";
+import React from "react";
 
 interface LoginValues {
   emailOrUsername: string;
@@ -19,7 +20,7 @@ const SignIn: React.FunctionComponent = () => {
   } = useForm<LoginValues>();
 
   return (
-    <Fragment>
+    <div>
       <form
         className={classes.signInform}
         onSubmit={handleSubmit((data) => console.log(data))}
@@ -50,7 +51,7 @@ const SignIn: React.FunctionComponent = () => {
         </div>
       </form>
       <div className={classes.signInWith}>
-        <h1>or sign in with </h1>
+        <div className={classes.sigInWithTitle}>or sign in with </div>
         <div className={classes.socialLinks}>
           <Link to="#" className={classes.socialLink}>
             <GoogleIcon className={classes.icons} />
@@ -60,7 +61,7 @@ const SignIn: React.FunctionComponent = () => {
           </Link>
         </div>
       </div>
-    </Fragment>
+    </div>
   );
 };
 

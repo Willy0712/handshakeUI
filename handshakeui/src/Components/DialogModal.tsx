@@ -1,7 +1,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   Divider,
   IconButton,
   Slide,
@@ -9,7 +8,7 @@ import {
 import classes from "../Styles/Modal.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import { TransitionProps } from "@mui/material/transitions";
-import React from "react";
+import React, { Fragment } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { Tabs, Tab, Box, Typography } from "@mui/material";
@@ -18,8 +17,8 @@ import SignIn from "./SignIn/SignIn";
 import SignUp from "./SignUp/SignUp";
 
 interface ModalProps {
-  title: string;
   // children: React.ReactNode;
+  title: string;
   isOpen: boolean;
   handleClose: () => void;
   indexTab: number;
@@ -35,10 +34,8 @@ const Transition = React.forwardRef(function Transition(
 });
 
 const DialogModal: React.FunctionComponent<ModalProps> = ({
-  title,
   isOpen,
   handleClose,
-  indexTab,
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -60,48 +57,50 @@ const DialogModal: React.FunctionComponent<ModalProps> = ({
       >
         {value === index && (
           <Box>
-            <Typography>{children}</Typography>
+            <Typography component="span">{children}</Typography>
           </Box>
         )}
       </div>
     );
   }
   return (
-    <Dialog
-      fullScreen={fullScreen}
-      fullWidth
-      maxWidth="sm"
-      TransitionComponent={Transition}
-      transitionDuration={500}
-      open={isOpen}
-      onClose={handleClose}
-    >
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        aria-label="disabled tabs example"
-        className={classes.tabs}
+    <Fragment>
+      <Dialog
+        fullWidth
+        maxWidth="sm"
+        fullScreen={fullScreen}
+        TransitionComponent={Transition}
+        transitionDuration={500}
+        open={isOpen}
+        onClose={handleClose}
       >
-        <Tab label="Sign In" />
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="disabled tabs example"
+          className={classes.tabs}
+        >
+          <Tab label="Sign In" />
 
-        <Tab label="Sign Up" />
-        <IconButton onClick={handleClose}>
+          <Tab label="Sign Up" />
+          {/* <IconButton onClick={handleClose}>
           <CloseIcon />
-        </IconButton>
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <DialogContent>
-          <Divider />
-          <SignIn />
-        </DialogContent>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <DialogContent>
-          <Divider />
-          <SignUp />
-        </DialogContent>
-      </TabPanel>
-    </Dialog>
+        </IconButton> */}
+        </Tabs>
+        <TabPanel value={value} index={0}>
+          <DialogContent>
+            <Divider />
+            <SignIn />
+          </DialogContent>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <DialogContent>
+            <Divider />
+            <SignUp />
+          </DialogContent>
+        </TabPanel>
+      </Dialog>
+    </Fragment>
   );
 };
 

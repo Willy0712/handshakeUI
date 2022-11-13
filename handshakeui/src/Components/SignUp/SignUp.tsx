@@ -1,22 +1,26 @@
-import { Fragment } from "react";
+import { Fragment, useCallback, useRef, useState } from "react";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import classes from "../../Styles/SignUp.module.scss";
+import "react-datepicker/dist/react-datepicker.css";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import moment from "moment";
 import {
   InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
+  Stack,
   TextField,
 } from "@mui/material";
-import { stringify } from "querystring";
+import axios from "axios";
 
-type SignUpValues = {
+interface SignUpValues {
   firstName: string;
   lastName: string;
   email: string;
@@ -26,128 +30,145 @@ type SignUpValues = {
   confirmPassword: string;
   dateOfBirth: string;
   gender: string;
-};
+}
 
 const SignUp = () => {
   //data validation schema
 
-  var Joi = require("joi");
-
-  const schema = Joi.object({
-    firstName: Joi.string().required(),
-    lastName: Joi.string().required(),
-    email: Joi.string()
-      .email({ tlds: { allow: false } })
-      .required()
-      .error(new Error("Please enter a valid email address")),
-    userName: Joi.string().alphanum().min(3).max(30).required(),
-    phoneNumber: Joi.string().required(),
-    password: Joi.string()
-      .regex(/^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z]).{8,128}$/)
-      .error(
-        new Error(
-          "Passwords must have at least 8 characters, 1 lowercase, 1 upper case, 1 number, and 1 special character."
-        )
+  const schema = yup.object().shape({
+    firstName: yup.string().required("First name is required"),
+    lastName: yup.string().required("Last name is required"),
+    email: yup.string().email().required("Email is required"),
+    userName: yup
+      .string()
+      .matches(
+        /^[a-zA-Z0-9]+$/,
+        "Username can only contain letters and numbers"
       )
-      .required(),
-    confirmPassword: Joi.ref("password"),
-    dateOfBirth: Joi.string().required(),
-  }).with("password", "confirmPassword");
-
-  schema.validate({});
+      .required("Username is required"),
+    phoneNumber: yup
+      .string()
+      .matches(
+        /^\+((?:9[679]|8[035789]|6[789]|5[90]|42|3[578]|2[1-689])|9[0-58]|8[1246]|6[0-6]|5[1-8]|4[013-9]|3[0-469]|2[70]|7|1)(?:\W*\d){0,13}\d$/,
+        "Invalid phone number, the phone number must have a country code"
+      )
+      .required("Phone number is required"),
+    password: yup
+      .string()
+      .required("Enter your password")
+      .matches(
+        /^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z]).{8,128}$/,
+        "Passwords must have at least 8 characters, 1 lowercase, 1 upper case, 1 number, and 1 special character."
+      ),
+    confirmPassword: yup
+      .string()
+      .required("Please confirm your password")
+      .oneOf([yup.ref("password"), null], "Passwords must match"),
+    dateOfBirth: yup.string().required(),
+  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpValues>({ resolver: joiResolver(schema) });
+  } = useForm<SignUpValues>({
+    resolver: yupResolver(schema),
+  });
 
-  const [value, setValue] = React.useState<Dayjs | null>(dayjs("2022-04-07"));
   const [gender, setGender] = React.useState("");
 
-  const onSubmit = (data: SignUpValues) => {
+  const [value, setValue] = React.useState<Dayjs | any>(dayjs(new Date()));
+
+  const onSubmitHandler = (data: SignUpValues) => {
     console.log(data);
+
+    axios
+      .post<SignUpValues>("https://localhost:7298/api/v1/account", data)
+      .then(function (response) {
+        console.log(response.status);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const handleChange = (event: SelectChangeEvent) => {
     setGender(event.target.value);
   };
 
+  const form = useRef(null);
   return (
     <Fragment>
-      <h1>Sign Up</h1>
-      <form className={classes.signUpform} onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className={classes.signUpform}
+        onSubmit={handleSubmit(onSubmitHandler)}
+      >
         <input
           {...register("firstName")}
           placeholder="First Name"
           className={classes.form__input}
         />
-        {errors.firstName && <p>errors.firstName.message</p>}
+        {errors.firstName && <p>{errors.firstName.message}</p>}
 
         <input
           {...register("lastName")}
           placeholder="Last Name"
           className={classes.form__input}
         />
-        {errors.lastName && <p>errors.lastName.message</p>}
+        {errors.lastName && <p>{errors.lastName.message}</p>}
 
         <input
           {...register("email")}
           placeholder="youremail@domain.com"
           className={classes.form__input}
         />
-        {errors.email && <p>errors.email.message</p>}
+        {errors.email && <p>{errors.email.message}</p>}
 
         <input
           {...register("userName")}
           placeholder="Create a username"
           className={classes.form__input}
         />
-        {errors.userName && <p>errors.userName.message</p>}
+        {errors.userName && <p>{errors.userName.message}</p>}
 
         <input
           {...register("phoneNumber")}
           placeholder="Your phone number"
           className={classes.form__input}
         />
-        {errors.phoneNumber && <p>errors.phoneNumber.message</p>}
+        {errors.phoneNumber && <p>{errors.phoneNumber.message}</p>}
 
         <input
           {...register("password", { required: true })}
           placeholder="Password"
           className={classes.form__input}
         />
-        {errors.password && <p>errors.password.message</p>}
+        {errors.password && <p>{errors.password.message}</p>}
 
         <input
           {...register("confirmPassword", { required: true })}
           placeholder="Confrim password"
           className={classes.form__input}
         />
-        {errors.password && <p>errors.confirmPassword.message</p>}
+        {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
 
-        {/* <input
-          {...register("dateOfBirth")}
-          type="date"
-          className={classes.form__input}
-        />
-        {errors.dateOfBirth && <p>Date of birth is required.</p>} */}
-
-        <LocalizationProvider
-          dateAdapter={AdapterDayjs}
-          {...register("dateOfBirth")}
-        >
-          <DatePicker
-            disableFuture
-            label="Date of birth"
-            openTo="year"
-            views={["year", "month", "day"]}
-            value={value}
-            onChange={(newValue) => {
-              setValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Stack>
+            <DatePicker
+              {...register("dateOfBirth")}
+              disableFuture
+              label="Date of birth"
+              openTo="year"
+              views={["year", "month", "day"]}
+              value={value}
+              onChange={(newValue) => {
+                setValue(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+              mask="____-__-__"
+              inputFormat="YYYY-MM-DD"
+            />
+          </Stack>
         </LocalizationProvider>
 
         <InputLabel id="gender__input">Gender</InputLabel>
@@ -162,9 +183,9 @@ const SignUp = () => {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={10}>Female</MenuItem>
-          <MenuItem value={20}>Male</MenuItem>
-          <MenuItem value={30}>Prefer not to say</MenuItem>
+          <MenuItem value={"Female"}>Female</MenuItem>
+          <MenuItem value={"Male"}>Male</MenuItem>
+          <MenuItem value={"PreferNotToSay"}>Prefer not to say</MenuItem>
         </Select>
         {errors.gender && <p>Gender is required.</p>}
 
