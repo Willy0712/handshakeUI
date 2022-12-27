@@ -1,14 +1,15 @@
-import { Fragment, useCallback, useRef, useState } from "react";
+import { Fragment, useRef } from "react";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import classes from "../../Styles/SignUp.module.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import AxiosService from "../../Axios/AxiosService";
 import moment from "moment";
 import {
   InputLabel,
@@ -19,6 +20,10 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
+import { DatePicker } from "@mui/x-date-pickers";
+import { format } from "path";
+import { type } from "os";
+import { ErrorResponse } from "@remix-run/router";
 
 interface SignUpValues {
   firstName: string;
@@ -70,6 +75,8 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
+    control,
+    setError,
     formState: { errors },
   } = useForm<SignUpValues>({
     resolver: yupResolver(schema),
@@ -77,26 +84,44 @@ const SignUp = () => {
 
   const [gender, setGender] = React.useState("");
 
-  const [value, setValue] = React.useState<Dayjs | any>(dayjs(new Date()));
-
   const onSubmitHandler = (data: SignUpValues) => {
     console.log(data);
 
-    axios
-      .post<SignUpValues>("https://localhost:7298/api/v1/account", data)
-      .then(function (response) {
-        console.log(response.status);
-      })
-      .catch(function (error) {
-        console.log(error);
+    AxiosService.createUser(data).catch((error) => {
+      error.response.data.forEach((u: any) => {
+        if (u.code === "LastName") {
+          setError("lastName", {
+            type: "server",
+            message: u.description,
+          });
+        }
+        if (u.code === "FirstName") {
+          setError("firstName", {
+            type: "server",
+            message: u.description,
+          });
+        }
+        if (u.code === "DuplicateUserName") {
+          setError("userName", {
+            type: "server",
+            message: u.description,
+          });
+        }
+        if (u.code === "DuplicateEmail") {
+          setError("email", {
+            type: "server",
+            message: u.description,
+          });
+        }
       });
+      console.log(error.response.data);
+    });
   };
 
   const handleChange = (event: SelectChangeEvent) => {
     setGender(event.target.value);
   };
 
-  const form = useRef(null);
   return (
     <Fragment>
       <form
@@ -109,14 +134,12 @@ const SignUp = () => {
           className={classes.form__input}
         />
         {errors.firstName && <p>{errors.firstName.message}</p>}
-
         <input
           {...register("lastName")}
           placeholder="Last Name"
           className={classes.form__input}
         />
         {errors.lastName && <p>{errors.lastName.message}</p>}
-
         <input
           {...register("email")}
           placeholder="youremail@domain.com"
@@ -130,47 +153,56 @@ const SignUp = () => {
           className={classes.form__input}
         />
         {errors.userName && <p>{errors.userName.message}</p>}
-
+        {/* {errors.userName?.type && <p>{errors.userName.type}</p>} */}
         <input
           {...register("phoneNumber")}
           placeholder="Your phone number"
           className={classes.form__input}
         />
         {errors.phoneNumber && <p>{errors.phoneNumber.message}</p>}
-
         <input
           {...register("password", { required: true })}
           placeholder="Password"
           className={classes.form__input}
         />
         {errors.password && <p>{errors.password.message}</p>}
-
         <input
           {...register("confirmPassword", { required: true })}
-          placeholder="Confrim password"
+          placeholder="Confirm password"
           className={classes.form__input}
         />
         {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
-
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Stack>
-            <DatePicker
-              {...register("dateOfBirth")}
-              disableFuture
-              label="Date of birth"
-              openTo="year"
-              views={["year", "month", "day"]}
-              value={value}
-              onChange={(newValue) => {
-                setValue(newValue);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-              mask="____-__-__"
-              inputFormat="YYYY-MM-DD"
-            />
-          </Stack>
-        </LocalizationProvider>
-
+        <Controller
+          control={control}
+          name="dateOfBirth"
+          render={({
+            field: { onChange, ref, onBlur, name, ...field },
+            fieldState,
+          }) => (
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Stack>
+                <DatePicker
+                  disableMaskedInput
+                  {...register("dateOfBirth")}
+                  {...field}
+                  inputRef={ref}
+                  // value={value?.format("YYYY-MM-DD")}
+                  disableFuture
+                  onChange={(event) => {
+                    onChange(dayjs(event).format("YYYY-MM-DD"));
+                  }}
+                  // onChange={onChange}
+                  label="Date of birth"
+                  openTo="year"
+                  views={["year", "month", "day"]}
+                  renderInput={(params) => <TextField {...params} />}
+                  // mask="____-__-__"
+                  inputFormat="YYYY-MM-DD"
+                />
+              </Stack>
+            </LocalizationProvider>
+          )}
+        />
         <InputLabel id="gender__input">Gender</InputLabel>
         <Select
           {...register("gender")}
@@ -188,7 +220,6 @@ const SignUp = () => {
           <MenuItem value={"PreferNotToSay"}>Prefer not to say</MenuItem>
         </Select>
         {errors.gender && <p>Gender is required.</p>}
-
         <input type="submit" value="Sign up" className={classes.btn} />
       </form>
     </Fragment>
