@@ -11,19 +11,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 import AxiosService from "../../Axios/AxiosService";
 import moment from "moment";
-import {
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { SelectChangeEvent, Stack, TextField } from "@mui/material";
 import axios from "axios";
 import { DatePicker } from "@mui/x-date-pickers";
-import { format } from "path";
-import { type } from "os";
-import { ErrorResponse } from "@remix-run/router";
 
 interface SignUpValues {
   firstName: string;
@@ -34,7 +24,6 @@ interface SignUpValues {
   password: string;
   confirmPassword: string;
   dateOfBirth: string;
-  gender: string;
 }
 
 const SignUp = () => {
@@ -58,18 +47,18 @@ const SignUp = () => {
         "Invalid phone number, the phone number must have a country code"
       )
       .required("Phone number is required"),
-    password: yup
-      .string()
-      .required("Enter your password")
-      .matches(
-        /^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z]).{8,128}$/,
-        "Passwords must have at least 8 characters, 1 lowercase, 1 upper case, 1 number, and 1 special character."
-      ),
-    confirmPassword: yup
-      .string()
-      .required("Please confirm your password")
-      .oneOf([yup.ref("password"), null], "Passwords must match"),
-    dateOfBirth: yup.string().required(),
+    // password: yup
+    //   .string()
+    //   .required("Enter your password")
+    //   .matches(
+    //     /^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z]).{8,128}$/,
+    //     "Passwords must have at least 8 characters, 1 lowercase, 1 upper case, 1 number, and 1 special character."
+    //   ),
+    // confirmPassword: yup
+    //   .string()
+    //   .required("Please confirm your password")
+    //   .oneOf([yup.ref("password"), null], "Passwords must match"),
+    dateOfBirth: yup.string().required("Required"),
   });
 
   const {
@@ -82,44 +71,55 @@ const SignUp = () => {
     resolver: yupResolver(schema),
   });
 
-  const [gender, setGender] = React.useState("");
-
   const onSubmitHandler = (data: SignUpValues) => {
-    console.log(data);
-
     AxiosService.createUser(data).catch((error) => {
-      error.response.data.forEach((u: any) => {
-        if (u.code === "LastName") {
-          setError("lastName", {
-            type: "server",
-            message: u.description,
-          });
+      for (const [key, value] of Object.entries(error.response.data.errors)) {
+        if (value instanceof Array) {
+          if (key === "FirstName") {
+            setError("firstName", {
+              type: "server",
+              message: value.toString(),
+            });
+          }
+          if (key === "LastName") {
+            setError("lastName", {
+              type: "server",
+              message: value.toString(),
+            });
+          }
+          if (key === "DuplicateEmail") {
+            setError("email", {
+              type: "server",
+              message: value.toString(),
+            });
+          }
+          if (key === "DuplicateUserName") {
+            setError("userName", {
+              type: "server",
+              message: value.toString(),
+            });
+          }
+          if (key === "PhoneNumber") {
+            setError("phoneNumber", {
+              type: "server",
+              message: value.toString(),
+            });
+          }
+          if (key === "ConfirmPassword") {
+            setError("password", {
+              type: "server",
+              message: value.toString(),
+            });
+          }
+          if (key === "$.dateOfBirth") {
+            setError("dateOfBirth", {
+              type: "server",
+              message: "Insert a valid data format: yyyy-mm-dd",
+            });
+          }
         }
-        if (u.code === "FirstName") {
-          setError("firstName", {
-            type: "server",
-            message: u.description,
-          });
-        }
-        if (u.code === "DuplicateUserName") {
-          setError("userName", {
-            type: "server",
-            message: u.description,
-          });
-        }
-        if (u.code === "DuplicateEmail") {
-          setError("email", {
-            type: "server",
-            message: u.description,
-          });
-        }
-      });
-      console.log(error.response.data);
+      }
     });
-  };
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setGender(event.target.value);
   };
 
   return (
@@ -203,23 +203,7 @@ const SignUp = () => {
             </LocalizationProvider>
           )}
         />
-        <InputLabel id="gender__input">Gender</InputLabel>
-        <Select
-          {...register("gender")}
-          labelId="gender__input"
-          id="demo-simple-select-helper"
-          value={gender}
-          label="Gender"
-          onChange={handleChange}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={"Female"}>Female</MenuItem>
-          <MenuItem value={"Male"}>Male</MenuItem>
-          <MenuItem value={"PreferNotToSay"}>Prefer not to say</MenuItem>
-        </Select>
-        {errors.gender && <p>Gender is required.</p>}
+        {errors.dateOfBirth && <p>{errors.dateOfBirth.message}</p>}
         <input type="submit" value="Sign up" className={classes.btn} />
       </form>
     </Fragment>
