@@ -114,7 +114,7 @@ const SignUp = () => {
           if (key === "$.dateOfBirth") {
             setError("dateOfBirth", {
               type: "server",
-              message: "Insert a valid data format: yyyy-mm-dd",
+              message: "Insert a valid date format: yyyy-mm-dd",
             });
           }
         }
