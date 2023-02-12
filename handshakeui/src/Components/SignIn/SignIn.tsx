@@ -10,6 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearMessage } from "../../slices/message";
 import { login } from "../../slices/auth";
 import { LoginValues } from "../../Constants/InterfacesSignUpLogin";
+import CircularProgress from "@mui/material/CircularProgress";
+import BackdropComponent from "../../Helpers/BackdropComponent";
+import { Alert, Backdrop, Snackbar } from "@mui/material";
 
 const SignIn: React.FunctionComponent = () => {
   let navigate = useNavigate();
@@ -26,6 +29,7 @@ const SignIn: React.FunctionComponent = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginValues>();
 
@@ -48,8 +52,17 @@ const SignIn: React.FunctionComponent = () => {
       });
   };
 
+  //Snackbar
+  const [open, setOpen] = React.useState(false);
+
+  // if (isLoggedIn) {
+  //   return <Navigate to="/profile" />;
+  // }
+
+  //TODO: Server side validation
   return (
     <div>
+      {message && <p>{message}</p>}
       <form
         className={classes.signInform}
         onSubmit={handleSubmit(onSubmitHandler)}
@@ -59,7 +72,7 @@ const SignIn: React.FunctionComponent = () => {
           className={classes.form__control}
           placeholder="Email or username"
         />
-        {errors.userName && <p>Last name is required.</p>}
+        {errors.userName && <p>Username or email is required.</p>}
 
         <input
           {...register("password", { required: true })}
@@ -69,11 +82,11 @@ const SignIn: React.FunctionComponent = () => {
         {errors.password && <p>Please enter a valid password.</p>}
 
         <input type="submit" value="Sign in" className={classes.btn} />
+
+        {<BackdropComponent loading={loading} />}
+        {}
+
         <div className={classes.remember__forgotpass}>
-          <div className={classes.rememberMe}>
-            <input type="checkbox" />
-            <label className={classes.checkbox__wrap}>Remember Me</label>
-          </div>
           <div className={classes.forgotpass}>
             <Link to="#">Forgot Password?</Link>
           </div>

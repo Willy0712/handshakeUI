@@ -47,17 +47,7 @@ const SignUp = () => {
         "Invalid phone number, the phone number must have a country code"
       )
       .required("Phone number is required"),
-    // password: yup
-    //   .string()
-    //   .required("Enter your password")
-    //   .matches(
-    //     /^(?=.*[A-Z])(?=.*[\W])(?=.*[0-9])(?=.*[a-z]).{8,128}$/,
-    //     "Passwords must have at least 8 characters, 1 lowercase, 1 upper case, 1 number, and 1 special character."
-    //   ),
-    // confirmPassword: yup
-    //   .string()
-    //   .required("Please confirm your password")
-    //   .oneOf([yup.ref("password"), null], "Passwords must match"),
+
     dateOfBirth: yup.string().required("Required"),
   });
 

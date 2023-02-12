@@ -13,8 +13,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { Tabs, Tab, Box, Typography } from "@mui/material";
 import { useState } from "react";
-import SignIn from "./SignIn/SignIn";
-import SignUp from "./SignUp/SignUp";
+import SignIn from "../Components/SignIn/SignIn";
+import SignUp from "../Components/SignUp/SignUp";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 interface ModalProps {
   // children: React.ReactNode;
@@ -80,9 +82,9 @@ const DialogModal: React.FunctionComponent<ModalProps> = ({
           aria-label="disabled tabs example"
           className={classes.tabs}
         >
-          <Tab label="Sign In" />
+          <Tab icon={<LoginIcon />} label="Sign In" />
 
-          <Tab label="Sign Up" />
+          <Tab icon={<LogoutIcon />} label="Sign Up" />
           {/* <IconButton onClick={handleClose}>
           <CloseIcon />
         </IconButton> */}

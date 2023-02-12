@@ -117,3 +117,13 @@ $dangerForegroundColor: #711c24;
   font-size: 13px;
   padding: 10px;
 }
+
+// SPINNER DESIGN
+// .MuiCircularProgress-colorPrimary {
+//   color: $main-color !important;
+// }
+
+.MuiCircularProgress-circle {
+  stroke: $main-color !important;
+  size: 500;
+}

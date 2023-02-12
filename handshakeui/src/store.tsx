@@ -11,6 +11,8 @@ const reducer = {
 export const store = configureStore({
   reducer: reducer,
   devTools: true,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(thunkMiddleware),
+  // middleware: (getDefaultMiddleware) =>
+  //   getDefaultMiddleware({
+  //     serializableCheck: false,
+  //   }),
 });

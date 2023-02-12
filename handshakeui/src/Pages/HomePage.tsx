@@ -1,7 +1,4 @@
-import React from "react";
 import Home from "../Components/LandingPage/Home";
-import Footer from "../Components/MainComponets/Footer";
-import Header from "../Components/MainComponets/Header";
 
 type Props = {};
 

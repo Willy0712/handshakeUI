@@ -5,7 +5,7 @@ import logo from "../../photos/handshake_logo.png";
 import { Outlet, Link } from "react-router-dom";
 import { Fragment } from "react";
 import SignIn from "../SignIn/SignIn";
-import DialogModel from "../DialogModal";
+import DialogModel from "../../Helpers/DialogModal";
 import SignUp from "../SignUp/SignUp";
 
 interface IHeaderProps {}
