@@ -3,13 +3,17 @@ import { SignUpValues, LoginValues } from "../Constants/InterfacesSignUpLogin";
 
 const API_URL = "https://localhost:7298/api/v1/";
 
+const headers = {
+  "Content-Type": "application/json",
+  withCredentials: true,
+};
+
 const createUser = (data: SignUpValues) => {
   return axios.post(API_URL + "account", data);
 };
 
 const login = (data: LoginValues) => {
-  return axios.post(API_URL + "login", data).then((response) => {
-    // console.log(response.data);
+  return axios.post(API_URL + "login", data, headers).then((response) => {
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
     }
@@ -20,6 +24,7 @@ const login = (data: LoginValues) => {
 const logout = () => {
   localStorage.removeItem("user");
   return axios.get("https://localhost:7298/logout").then((response) => {
+    console.log(response.data);
     return response.data;
   });
 };

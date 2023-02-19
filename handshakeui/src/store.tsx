@@ -15,4 +15,5 @@ export const store = configureStore({
   //   getDefaultMiddleware({
   //     serializableCheck: false,
   //   }),
+  middleware: [thunkMiddleware],
 });

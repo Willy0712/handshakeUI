@@ -5,14 +5,11 @@ import classes from "../../Styles/SignIn.module.scss";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import GoogleIcon from "@mui/icons-material/Google";
 import React from "react";
-import AxiosService from "../../Axios/AxiosService";
 import { useDispatch, useSelector } from "react-redux";
 import { clearMessage } from "../../slices/message";
 import { login } from "../../slices/auth";
 import { LoginValues } from "../../Constants/InterfacesSignUpLogin";
-import CircularProgress from "@mui/material/CircularProgress";
 import BackdropComponent from "../../Helpers/BackdropComponent";
-import { Alert, Backdrop, Snackbar } from "@mui/material";
 
 const SignIn: React.FunctionComponent = () => {
   let navigate = useNavigate();
@@ -29,7 +26,6 @@ const SignIn: React.FunctionComponent = () => {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<LoginValues>();
 
@@ -44,16 +40,13 @@ const SignIn: React.FunctionComponent = () => {
     dispatch(login(data))
       .unwrap()
       .then(() => {
-        navigate("/profile");
+        // navigate("/profile");
         window.location.reload();
       })
       .catch(() => {
         setLoading(false);
       });
   };
-
-  //Snackbar
-  const [open, setOpen] = React.useState(false);
 
   // if (isLoggedIn) {
   //   return <Navigate to="/profile" />;
@@ -88,7 +81,7 @@ const SignIn: React.FunctionComponent = () => {
 
         <div className={classes.remember__forgotpass}>
           <div className={classes.forgotpass}>
-            <Link to="#">Forgot Password?</Link>
+            <Link to="/reset">Forgot Password?</Link>
           </div>
         </div>
       </form>

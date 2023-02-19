@@ -4,6 +4,7 @@ import HomePage from "./Pages/HomePage";
 import { Routes, Route } from "react-router-dom";
 import Header from "./Components/MainComponets/Header";
 import Footer from "./Components/MainComponets/Footer";
+import ResetPassword from "./Pages/ResetPassword";
 
 function App() {
   return (
@@ -12,8 +13,8 @@ function App() {
         <Route path="/" element={<Header />}>
           <Route index element={<HomePage />} />
         </Route>
+        <Route path="/reset" element={<ResetPassword />} />
       </Routes>
-      <Footer />
     </div>
   );
 }
