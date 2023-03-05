@@ -1,5 +1,4 @@
-import { Fragment, useRef } from "react";
-import React from "react";
+import { Fragment } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,8 +10,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 import AxiosService from "../../Axios/AxiosService";
 import moment from "moment";
-import { SelectChangeEvent, Stack, TextField } from "@mui/material";
-import axios from "axios";
+import { Stack, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 
 interface SignUpValues {

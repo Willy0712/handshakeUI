@@ -8,7 +8,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearMessage } from "../../slices/message";
 import { login } from "../../slices/auth";
-import { LoginValues } from "../../Constants/InterfacesSignUpLogin";
+import { LoginValues } from "../../Constants/Interfaces";
 import BackdropComponent from "../../Helpers/BackdropComponent";
 
 const SignIn: React.FunctionComponent = () => {

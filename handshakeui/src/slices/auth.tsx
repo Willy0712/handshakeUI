@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setMessage } from "./message";
-import { LoginValues } from "../Constants/InterfacesSignUpLogin";
+import { LoginValues } from "../Constants/Interfaces";
 
 import AuthService from "../Axios/AxiosService";
 

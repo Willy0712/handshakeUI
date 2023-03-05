@@ -14,3 +14,7 @@ export interface LoginValues {
   password: string;
   // isShowLogin: string;
 }
+
+export interface ForgotPasswordValues {
+  email: string;
+}

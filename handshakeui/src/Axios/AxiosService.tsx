@@ -1,15 +1,24 @@
 import axios from "axios";
-import { SignUpValues, LoginValues } from "../Constants/InterfacesSignUpLogin";
+import {
+  SignUpValues,
+  LoginValues,
+  ForgotPasswordValues,
+} from "../Constants/Interfaces";
 
 const API_URL = "https://localhost:7298/api/v1/";
 
 const headers = {
+  "Access-Control-Allow-Origin": "*",
   "Content-Type": "application/json",
   withCredentials: true,
 };
 
 const createUser = (data: SignUpValues) => {
   return axios.post(API_URL + "account", data);
+};
+
+const forgotPassword = (data: ForgotPasswordValues) => {
+  return axios.post(API_URL + "ForgotPassword", data);
 };
 
 const login = (data: LoginValues) => {
@@ -38,5 +47,6 @@ const AxiosService = {
   login,
   logout,
   getCurrentUser,
+  forgotPassword,
 };
 export default AxiosService;

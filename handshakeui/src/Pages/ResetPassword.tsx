@@ -1,36 +1,60 @@
-import {
-  alpha,
-  OutlinedInputProps,
-  styled,
-  TextField,
-  TextFieldProps,
-} from "@mui/material";
-import React from "react";
+import { Fragment } from "react";
 import Footer from "../Components/MainComponets/Footer";
 import HeaderWithoutSearch from "../Components/MainComponets/HeaderWithoutSearch";
 import classes from "../Styles/ResetPassword.module.scss";
+import AxiosService from "../Axios/AxiosService";
+import { ForgotPasswordValues } from "../Constants/Interfaces";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 export default function ResetPassword() {
-  const handleSubmit = (event: any) => {};
+  const schema = yup.object().shape({
+    email: yup.string().email().required("Email is required"),
+  });
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<ForgotPasswordValues>({
+    resolver: yupResolver(schema),
+  });
+
+  const sendLinkToResetPassword = (data: ForgotPasswordValues) => {
+    AxiosService.forgotPassword(data).then((res) => {
+      console.log(res.data);
+    });
+  };
   return (
-    <div>
+    <Fragment>
       <HeaderWithoutSearch />
-      <div className={classes.box}>
-        <div className={classes.box__title}>Forgot password?</div>
-        <form onSubmit={handleSubmit}>
-          <div className={classes.box__form}>
-            <label className={classes.box__label}>
-              Enter the email address associated with your account, and we’ll
-              email you a link to reset your password.
-            </label>
-            <div className={classes.box__input}>
-              <input placeholder="Email" type="text" />
+      <div className={classes.wrap}>
+        <div className={classes.box}>
+          <div className={classes.box__title}>Forgot password?</div>
+          <label className={classes.box__label}>
+            Enter the email address associated with your account, and we’ll
+            email you a link to reset your password.
+          </label>
+          <form onSubmit={handleSubmit(sendLinkToResetPassword)}>
+            <div className={classes.box__form}>
+              <div className={classes.box__input}>
+                <input
+                  {...register("email")}
+                  placeholder="youremail@domain.com"
+                />
+                {errors.email && <p>{errors.email.message}</p>}{" "}
+              </div>
+              <input
+                className={`${classes.btn}  ${classes.resetButton}`}
+                type="submit"
+                value="Submit"
+              />
             </div>
-            <input className={classes.btn} type="submit" value="Submit" />
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
       <Footer />
-    </div>
+    </Fragment>
   );
 }
