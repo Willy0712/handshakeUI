@@ -22,20 +22,23 @@ const forgotPassword = (data: ForgotPasswordValues) => {
 };
 
 const login = (data: LoginValues) => {
-  return axios.post(API_URL + "login", data, headers).then((response) => {
-    if (response.data) {
-      localStorage.setItem("user", JSON.stringify(response.data));
-    }
-    return response.data;
-  });
+  return axios
+    .post(API_URL + "authentication/login", data, headers)
+    .then((response) => {
+      if (response.data) {
+        localStorage.setItem("user", JSON.stringify(response.data));
+      }
+      return response.data;
+    });
 };
 
 const logout = () => {
   localStorage.removeItem("user");
-  return axios.get("https://localhost:7298/logout").then((response) => {
-    console.log(response.data);
-    return response.data;
-  });
+  return axios
+    .post(API_URL + "authentication/logout", null, headers)
+    .then((response) => {
+      console.log(response.data);
+    });
 };
 
 const getCurrentUser = () => {

@@ -7,6 +7,8 @@ import { Fragment } from "react";
 import DialogModel from "../../Helpers/DialogModal";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../slices/auth";
+import { AuthenticatedMenu, UnauthenticatedMenu } from "../AuthMenu/AuthMenu";
+import { withBothCookiesCheck } from "../withBothCookiesCheck";
 
 interface IHeaderProps {}
 
@@ -37,6 +39,12 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
     setIsOpenDialog(false);
   };
 
+  const SecureAuthenticatedMenu = withBothCookiesCheck(
+    AuthenticatedMenu,
+    handleDialogOpen,
+    handleOpen
+  );
+
   return (
     <Fragment>
       <div className={classes.header}>
@@ -50,36 +58,28 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
         </div>
 
         {!currentUser ? (
-          <div className={classes.header__right}>
-            <ul>
-              <li onClick={handleDialogOpen}>Login</li>
-              <DialogModel
-                title="Login"
-                // children={<SignIn />}
-                isOpen={isOpen}
-                handleClose={handleDialogClose}
-                indexTab={0}
-              />
-
-              <li onClick={handleOpen}>Sign-up</li>
-              <DialogModel
-                title="Sign-up"
-                // children={<SignUp />}
-                isOpen={isOpenDialog}
-                handleClose={handleClose}
-                indexTab={1}
-              />
-            </ul>
-          </div>
+          <>
+            <UnauthenticatedMenu
+              onLoginOpen={handleDialogOpen}
+              onSignUpOpen={handleOpen}
+            />
+            <DialogModel
+              title="Login"
+              // children={<SignIn />}
+              isOpen={isOpen}
+              handleClose={handleDialogClose}
+              indexTab={0}
+            />
+            <DialogModel
+              title="Sign-up"
+              // children={<SignUp />}
+              isOpen={isOpenDialog}
+              handleClose={handleClose}
+              indexTab={1}
+            />
+          </>
         ) : (
-          <div className={classes.header__right}>
-            <ul>
-              <li>Upload</li>
-              <li>Profile</li>
-              <li>Money</li>
-              <li onClick={logOut}>Logout</li>
-            </ul>
-          </div>
+          <SecureAuthenticatedMenu onLogout={logOut} />
         )}
       </div>
       <Outlet />

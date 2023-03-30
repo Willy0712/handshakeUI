@@ -15,5 +15,8 @@ export const store = configureStore({
   //   getDefaultMiddleware({
   //     serializableCheck: false,
   //   }),
-  middleware: [thunkMiddleware],
+  // middleware: [thunkMiddleware],
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
