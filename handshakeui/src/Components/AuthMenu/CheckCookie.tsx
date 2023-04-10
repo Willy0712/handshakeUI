@@ -9,8 +9,14 @@ interface CheckCookieProps {
 
 const CheckCookie: React.FunctionComponent<CheckCookieProps> = ({ logout }) => {
   const checkBothCookies = () => {
-    const cookie1 = Cookie.get("aspauco");
-    const cookie2 = Cookie.get("auco");
+    // const cookie1 = Cookie.get("aspauco");
+    // const cookie2 = Cookie.get("auco");
+    const cookies = document.cookie.split("; ");
+    const allCookies = document.cookie;
+    const cookie1 = cookies.find((cookie) => cookie.startsWith("aspauco="));
+    const cookie2 = cookies.find((cookie) => cookie.startsWith("auco="));
+    console.log(cookie1, cookie2);
+    console.log(allCookies);
     return cookie1 && cookie2;
   };
 
@@ -21,11 +27,15 @@ const CheckCookie: React.FunctionComponent<CheckCookieProps> = ({ logout }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       const cookiesPresent = checkBothCookies();
+      console.log("Cookies present:", cookiesPresent); // Add this line
+      console.log("Cookie1:", Cookie.get("aspauco")); // Add this line
+      console.log("Cookie2:", Cookie.get("auco"));
       setAreBothCookiesPresent(cookiesPresent);
       if (!cookiesPresent) {
+        console.log("Logging out...");
         logout();
       }
-    }, 1000);
+    }, 30000);
 
     return () => {
       clearInterval(interval);

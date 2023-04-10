@@ -1,15 +1,10 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../slices/auth";
-import { RootState } from "../store"; // Import RootState from your store
-import CheckCookie from "./AuthMenu/CheckCookie";
+import { RootState, AppDispatch } from "../store"; // Import RootState from your store
+import { useCheckAuth } from "../Components/AuthMenu/CheckAuth";
 
 import { UnauthenticatedMenu } from "./AuthMenu/AuthMenu";
-
-interface WithBothCookiesCheckProps {
-  onLoginOpen: () => void;
-  onSignUpOpen: () => void;
-}
 
 export function withBothCookiesCheck<T>(
   WrappedComponent: React.ComponentType<T>,
@@ -18,13 +13,16 @@ export function withBothCookiesCheck<T>(
 ) {
   return (props: React.PropsWithChildren<T>) => {
     const { user: currentUser } = useSelector((state: RootState) => state.auth);
-    const dispatch = useDispatch<any>();
+    const dispatch = useDispatch<AppDispatch>();
+    const isAuthenticated = useCheckAuth();
 
+    // Use the useCheckAuth hook
     const logOut = useCallback(() => {
       dispatch(logout());
     }, [dispatch]);
 
-    if (!currentUser) {
+    if (!currentUser || !isAuthenticated) {
+      logOut();
       return (
         <UnauthenticatedMenu
           onLoginOpen={onLoginOpen}
@@ -33,11 +31,6 @@ export function withBothCookiesCheck<T>(
       );
     }
 
-    return (
-      <>
-        <CheckCookie logout={logOut} />
-        <WrappedComponent {...props} />
-      </>
-    );
+    return <WrappedComponent {...props} />;
   };
 }

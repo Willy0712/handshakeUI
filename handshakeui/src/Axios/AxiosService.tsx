@@ -13,6 +13,10 @@ const headers = {
   withCredentials: true,
 };
 
+const checkCookies = () => {
+  return axios.get(API_URL + "checkcookies", headers);
+};
+
 const createUser = (data: SignUpValues) => {
   return axios.post(API_URL + "account", data);
 };
@@ -51,5 +55,6 @@ const AxiosService = {
   logout,
   getCurrentUser,
   forgotPassword,
+  checkCookies,
 };
 export default AxiosService;
