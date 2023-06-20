@@ -49,6 +49,51 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user") || "{}");
 };
 
+const sendTokenToBackend = async (provider: string, token: string) => {
+  try {
+    return await axios
+      .post(
+        API_URL + "authentication/sociallogin",
+        {
+          provider,
+          token,
+        },
+        headers
+      )
+      .then((response) => {
+        if (response.data) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
+        return response.data;
+      });
+  } catch (error) {
+    console.error("Error sending the token to the back-end");
+  }
+};
+
+// const sendTokenToBackend = async (
+//   provider: string,
+//   token: string
+// ): Promise<any> => {
+//   try {
+//     const response = await axios.post(
+//       API_URL + "authentication/sociallogin",
+//       {
+//         provider,
+//         token,
+//       },
+//       headers
+//     );
+//     if (response.data) {
+//       localStorage.setItem("user", JSON.stringify(response.data));
+//     }
+//     return response.data;
+//   } catch (error) {
+//     console.error("Error sending the token to the back-end");
+//     throw error; // This ensures that the method rejects with an error when it fails
+//   }
+// };
+
 const AxiosService = {
   createUser,
   login,
@@ -56,5 +101,6 @@ const AxiosService = {
   getCurrentUser,
   forgotPassword,
   checkCookies,
+  sendTokenToBackend,
 };
 export default AxiosService;
