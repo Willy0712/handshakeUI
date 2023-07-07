@@ -59,55 +59,55 @@ const SignUp = () => {
     resolver: yupResolver(schema),
   });
 
+  //Validate from server
+
   const onSubmitHandler = (data: SignUpValues) => {
     AxiosService.createUser(data).catch((error) => {
-      for (const [key, value] of Object.entries(error.response.data.errors)) {
-        if (value instanceof Array) {
-          if (key === "FirstName") {
-            setError("firstName", {
-              type: "server",
-              message: value.toString(),
-            });
-          }
-          if (key === "LastName") {
-            setError("lastName", {
-              type: "server",
-              message: value.toString(),
-            });
-          }
-          if (key === "DuplicateEmail") {
-            setError("email", {
-              type: "server",
-              message: value.toString(),
-            });
-          }
-          if (key === "DuplicateUserName") {
-            setError("userName", {
-              type: "server",
-              message: value.toString(),
-            });
-          }
-          if (key === "PhoneNumber") {
-            setError("phoneNumber", {
-              type: "server",
-              message: value.toString(),
-            });
-          }
-          if (key === "ConfirmPassword") {
-            setError("password", {
-              type: "server",
-              message: value.toString(),
-            });
-          }
-          if (key === "$.dateOfBirth") {
-            setError("dateOfBirth", {
-              type: "server",
-              message: "Insert a valid date format: yyyy-mm-dd",
-            });
-          }
-        }
-      }
+      handleServerErrors(error.response?.data?.errors);
     });
+  };
+
+  type FieldName =
+    | "firstName"
+    | "lastName"
+    | "email"
+    | "userName"
+    | "phoneNumber"
+    | "dateOfBirth"
+    | "password"
+    | "confirmPassword";
+  const handleServerErrors = (errors: any) => {
+    if (!errors) return;
+
+    Object.entries(errors).forEach(([key, value]) => {
+      const stringValue = value as string;
+      const field: FieldName = mapServerKeyToField(key);
+      setError(field, {
+        type: "server",
+        message: stringValue,
+      });
+    });
+  };
+
+  const mapServerKeyToField = (key: string): FieldName => {
+    switch (key) {
+      case "FirstName":
+        return "firstName";
+      case "LastName":
+        return "lastName";
+      case "DuplicateEmail":
+        return "email";
+      case "DuplicateUserName":
+        return "userName";
+      case "PhoneNumber":
+        return "phoneNumber";
+      case "ConfirmPassword":
+        return "password";
+      case "$.dateOfBirth":
+        return "dateOfBirth";
+      default:
+        return "confirmPassword";
+    }
   };
 
   return (
