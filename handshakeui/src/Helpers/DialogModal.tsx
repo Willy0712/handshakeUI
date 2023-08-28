@@ -24,6 +24,7 @@ interface ModalProps {
   isOpen: boolean;
   handleClose: () => void;
   indexTab: number;
+  message?: string;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -38,6 +39,7 @@ const Transition = React.forwardRef(function Transition(
 const DialogModal: React.FunctionComponent<ModalProps> = ({
   isOpen,
   handleClose,
+  message,
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -76,19 +78,21 @@ const DialogModal: React.FunctionComponent<ModalProps> = ({
         open={isOpen}
         onClose={handleClose}
       >
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="disabled tabs example"
-          className={classes.tabs}
-        >
-          <Tab icon={<LoginIcon />} label="Sign In" />
+        {!message && (
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="disabled tabs example"
+            className={classes.tabs}
+          >
+            <Tab icon={<LoginIcon />} label="Sign In" />
 
-          <Tab icon={<LogoutIcon />} label="Sign Up" />
-          {/* <IconButton onClick={handleClose}>
+            <Tab icon={<LogoutIcon />} label="Sign Up" />
+            {/* <IconButton onClick={handleClose}>
           <CloseIcon />
         </IconButton> */}
-        </Tabs>
+          </Tabs>
+        )}
         <TabPanel value={value} index={0}>
           <DialogContent>
             <Divider />

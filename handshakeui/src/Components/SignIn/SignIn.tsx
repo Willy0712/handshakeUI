@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import classes from "../../Styles/SignIn.module.scss";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -98,17 +98,6 @@ const SignIn: React.FunctionComponent = () => {
   };
 
   // Facebook Sign in
-  // <FacebookLogin
-  //   appId="1307562993522333"
-  //   autoLoad={false}
-  //   fields="name,email"
-  //   scope="name,public_profile,email"
-  //   callback={handleResponseFromFacebook}
-  //   render={(renderProps: any) => (
-  //     <button onClick={renderProps.onClick}>Customized Facebook Button</button>
-  //   )}
-  // />;
-
   function handleResponseFromFacebook(response: any) {
     console.log("Facebook login response:", response);
     if (response.accessToken) {
@@ -128,105 +117,6 @@ const SignIn: React.FunctionComponent = () => {
       console.log("Facebook login error: User did not authorize the app");
     }
   }
-
-  // const handleResponseFromFacebook = async () => {
-  //   try {
-  //     const response: any = await new Promise((resolve, reject) => {
-  //       window.FB.login(
-  //         (response: any) => {
-  //           if (response.authResponse) {
-  //             resolve(response.authResponse);
-  //           } else {
-  //             reject();
-  //           }
-  //         },
-  //         { scope: "email,name" }
-  //       );
-  //     });
-  //     const accessToken = response.accessToken;
-  //     // Send the access token to your back-end
-  //     dispatch(facebookSocialLogin(accessToken))
-  //       .unwrap()
-  //       .then(() => {
-  //         window.location.reload();
-  //       })
-  //       .catch(() => {
-  //         setLoading(false);
-  //       });
-  //   } catch (error) {
-  //     console.error("Facebook Sign In was unsuccessful. Try again later.");
-  //   }
-  // };
-
-  // Use the FB object to call Facebook SDK methods
-  // Example: FB.getLoginStatus(), FB.login(), etc.
-
-  // function handleResponseFromFacebook() {
-  //   if (typeof FB !== "undefined") {
-  //     FB.login(
-  //       function (response: any) {
-  //         if (response.authResponse) {
-  //           console.log("Facebook login success: ", response.authResponse);
-  //           console.log(
-  //             "Facebook login success: ",
-  //             response.authResponse.accessToken
-  //           );
-  //           // Handle the authenticated response
-  //           const accessToken = response.authResponse.accessToken;
-
-  //           dispatch(facebookSocialLogin(accessToken))
-  //             .unwrap()
-  //             .then(() => {
-  //               window.location.reload();
-  //             })
-  //             .catch(() => {
-  //               setLoading(false);
-  //             });
-  //           // ... handle further processing or dispatch actions
-  //         } else {
-  //           // Handle the case where the user did not authorize the app
-  //           console.log("Facebook login error: User did not authorize the app");
-  //         }
-  //       },
-  //       { scope: "public_profile,email" } // Add any additional Facebook permissions your app requires
-  //     );
-  //   } else {
-  //     console.log("Facebook SDK not loaded");
-  //   }
-  // }
-
-  // const handleResponseFromFacebook = async () => {
-  //   console.log("Facebook button clicked");
-  //   console.log();
-
-  //   try {
-  //     const { authResponse } = await window.FB.login();
-
-  //     if (authResponse && authResponse.accessToken) {
-  //       const { accessToken } = authResponse;
-
-  //       // Call the necessary Facebook login logic here
-  //       // ...
-
-  //       console.log("Facebook token:", accessToken);
-
-  //       dispatch(facebookSocialLogin(accessToken)) // assuming you've defined a `facebookSocialLogin` action
-  //         .unwrap()
-  //         .then(() => {
-  //           window.location.reload();
-  //         })
-  //         .catch(() => {
-  //           setLoading(false);
-  //         });
-  //     }
-  //   } catch (error) {
-  //     console.error("Facebook login error:", error);
-  //   }
-  // };
-
-  // if (isLoggedIn) {
-  //   return <Navigate to="/profile" />;
-  // }
 
   //TODO: Server side validation
   return (
