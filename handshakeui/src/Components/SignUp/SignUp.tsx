@@ -26,7 +26,7 @@ interface SignUpValues {
   dateOfBirth: string;
 }
 
-const SignUp = () => {
+const SignUp: React.FunctionComponent = () => {
   //data validation schema
   const [loading, setLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("");
@@ -71,14 +71,24 @@ const SignUp = () => {
 
     AxiosService.createUser(data)
       .then((response) => {
-        console.log(response.status);
         if (response.status === 201) {
           setResponseMessage(response.data);
           setResponseStatus(201);
         }
       })
       .catch((error) => {
-        handleServerErrors(error.response?.data?.errors);
+        console.log("Error in catch", error);
+        if (error.response && error.response.status === 400) {
+          // This is for validation errors
+          console.log(error.response.data.errors);
+          handleServerErrors(error.response.data.errors);
+        } else if (error.response.data.message) {
+          // Handle general error message
+          setResponseMessage(error.response.data.message);
+          setResponseStatus(error.response.status);
+        }
+        // In case of network errors or other unexpected issues
+        setResponseMessage("An unexpected error occurred.");
       })
       .finally(() => {
         setLoading(false);
@@ -96,7 +106,7 @@ const SignUp = () => {
     | "confirmPassword";
   const handleServerErrors = (errors: any) => {
     if (!errors) return;
-
+    console.log("Errors in handle server erros", errors);
     Object.entries(errors).forEach(([key, value]) => {
       const stringValue = value as string;
       const field: FieldName = mapServerKeyToField(key);
@@ -113,9 +123,9 @@ const SignUp = () => {
         return "firstName";
       case "LastName":
         return "lastName";
-      case "DuplicateEmail":
+      case "Email":
         return "email";
-      case "DuplicateUserName":
+      case "Username":
         return "userName";
       case "PhoneNumber":
         return "phoneNumber";
