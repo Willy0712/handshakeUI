@@ -8,7 +8,7 @@ import DialogModel from "../../Helpers/DialogModal";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../slices/auth";
 import { AuthenticatedMenu, UnauthenticatedMenu } from "../AuthMenu/AuthMenu";
-import { withBothCookiesCheck } from "../withBothCookiesCheck";
+// import { withBothCookiesCheck } from "../withBothCookiesCheck";
 
 interface IHeaderProps {}
 
@@ -39,11 +39,11 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
     setIsOpenDialog(false);
   };
 
-  const SecureAuthenticatedMenu = withBothCookiesCheck(
-    AuthenticatedMenu,
-    handleDialogOpen,
-    handleOpen
-  );
+  // const SecureAuthenticatedMenu = withBothCookiesCheck(
+  //   AuthenticatedMenu,
+  //   handleDialogOpen,
+  //   handleOpen
+  // );
 
   return (
     <Fragment>
@@ -79,7 +79,7 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
             />
           </>
         ) : (
-          <SecureAuthenticatedMenu onLogout={logOut} />
+          <AuthenticatedMenu onLogout={logOut} />
         )}
       </div>
       <Outlet />
