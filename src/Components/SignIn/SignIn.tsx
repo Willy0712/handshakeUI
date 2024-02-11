@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import classes from "../../Styles/SignIn.module.scss";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -16,11 +16,6 @@ import { LoginValues } from "../../Constants/Interfaces";
 import BackdropComponent from "../../Helpers/BackdropComponent";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
-interface GoogleAuthResponse {
-  getAuthResponse(): {
-    id_token: string;
-  };
-}
 
 declare global {
   interface Window {
@@ -28,16 +23,9 @@ declare global {
   }
 }
 
-interface FacebookAuthResponse {
-  authResponse: {
-    accessToken: string;
-  };
-}
 
 const SignIn: React.FunctionComponent = () => {
-  let navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { isLoggedIn } = useSelector((state: any) => state.auth);
   const { message } = useSelector((state: any) => state.message);
 
   const dispatch = useDispatch<any>();

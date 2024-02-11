@@ -1,12 +1,9 @@
-import React, { useCallback } from "react";
-import SearchIcon from "@mui/icons-material/Search";
+import React from "react";
 import classes from "../../Styles/Header.module.scss";
 import logo from "../../photos/handshake_logo.png";
-import { Outlet, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import { Fragment } from "react";
 import DialogModel from "../../Helpers/DialogModal";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../slices/auth";
 
 interface IHeaderProps {}
 
@@ -59,7 +56,6 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
           </ul>
         </div>
       </div>
-      <Outlet />
     </Fragment>
   );
 };

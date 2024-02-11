@@ -1,6 +1,5 @@
 import { Dialog, DialogContent, Divider, Slide } from "@mui/material";
 import classes from "../Styles/Modal.module.scss";
-import CloseIcon from "@mui/icons-material/Close";
 import { TransitionProps } from "@mui/material/transitions";
 import React, { Fragment } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";

@@ -15,14 +15,13 @@ export default function ResetPassword() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<ForgotPasswordValues>({
     resolver: yupResolver(schema),
   });
 
   const sendLinkToResetPassword = (data: ForgotPasswordValues) => {
-    AxiosService.forgotPassword(data).then((res) => {
+    AxiosService.forgotPassword(data).then((res: any) => {
       console.log(res.data);
     });
   };
